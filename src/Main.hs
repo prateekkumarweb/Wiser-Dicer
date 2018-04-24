@@ -8,7 +8,7 @@ sizeX = floor (gridSize * n+ lineWidth)
 sizeY = floor (gridSize * n + lineWidth) 
 gridSize = 100
 lineWidth = 5
-n = 5
+n = 3
 
 tileSize :: Float
 tileSize = 100.0
@@ -27,11 +27,28 @@ makeTile x y = pictures [
 		line[ (x , y + tileSize) , (x + tileSize , y + tileSize)]
 	]
 
+-- Use maybe as a list might not always give a Picture
+wallGrid :: [(Int , Int)] -> Picture
+wallGrid [] = blank
+wallGrid ((x,y) : ls) = pictures [
+		makeWall x y,
+		wallGrid ls
+	] 
+
+-- used to make a colored tile ( can be used for making any type of tile) 
+makeWall :: Int -> Int -> Picture
+makeWall xBlock yBlock = color black ( polygon [(x,y),(x,y + tileSize),(x + tileSize,y + tileSize),(x + tileSize,y)])
+	where 
+		x = (fromIntegral xBlock) * tileSize 
+		y = (fromIntegral yBlock) * tileSize 
+
 gameGrid :: Picture
 gameGrid = pictures $ [
 		-- makes a grid of n x n tile
 		( makeTile x y ) | x <- [0 , tileSize.. (n-1) * tileSize ] , y <- [0 , tileSize.. (n-1) * tileSize ]  
-	] ++ [ makeFinish 3 4 ]
+	] ++ [ makeFinish 0 1 ] ++ [ wallGrid  wallPos]
+	where
+		wallPos = [(0,0) , (0,2) , (2,2)]
 
 
 gameAsPicture :: Picture -> Picture
