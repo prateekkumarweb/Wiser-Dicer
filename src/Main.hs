@@ -1,4 +1,3 @@
-
 module Main where
 
 import Data.Array
@@ -16,6 +15,10 @@ tileSize = 100.0
 
 initialGame = blank
 
+-- adds finishing point at given block number ( can use maybe )
+makeFinish :: Int -> Int -> Picture
+makeFinish xBlock yBlock = translate ((fromIntegral xBlock) * tileSize + 25.0) ((fromIntegral yBlock) * tileSize + 25.0) $ scale 0.5 0.5 $ text "3"
+
 makeTile :: Float -> Float -> Picture
 makeTile x y = pictures [
 		line[ (x , y) , (x , y + tileSize)],
@@ -25,10 +28,10 @@ makeTile x y = pictures [
 	]
 
 gameGrid :: Picture
-gameGrid = pictures [
+gameGrid = pictures $ [
 		-- makes a grid of n x n tile
 		( makeTile x y ) | x <- [0 , tileSize.. (n-1) * tileSize ] , y <- [0 , tileSize.. (n-1) * tileSize ]  
-	]
+	] ++ [ makeFinish 3 4 ]
 
 
 gameAsPicture :: Picture -> Picture
