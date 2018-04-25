@@ -4,16 +4,41 @@ import Data.Array
 import Graphics.Gloss
 import Graphics.Gloss.Data.Color
 
-sizeX = floor (gridSize * n+ lineWidth)
-sizeY = floor (gridSize * n + lineWidth) 
-gridSize = 100
-lineWidth = 5
-n = 3
+sizeX = floor (gridSize * nF+ lineWidth)
+sizeY = floor (gridSize * nF + lineWidth) 
+gridSize = 100.0
+lineWidth = 5.0
+
+nI :: Int
+nI = 5
+nF :: Float
+nF = 5.0
 
 tileSize :: Float
 tileSize = 100.0
 
 initialGame = blank
+
+map0 :: [String]
+map0= [
+	 "bbbbb",
+	 "eeeeb",
+	 "bbbbb",
+	 "beeee",
+	 "bbbbb"
+	]
+
+findB :: [Char] -> Int -> [Int]
+findB [] _ = []
+findB (x:xs) i 
+ | x == 'b' = i : findB  xs (i+1)
+ | otherwise = findB xs (i+1)
+
+findAllB :: [String] -> Int -> [(Int,Int)]
+findAllB [] _ = []
+findAllB  (x:xs) i = row ++ (findAllB xs (i-1)) 
+ 	where
+ 		row = [ (b,a) | b<- findB x 0, let a = i ]
 
 -- adds finishing point at given block number ( can use maybe )
 makeFinish :: Int -> Int -> Picture
@@ -37,7 +62,7 @@ wallGrid ((x,y) : ls) = pictures [
 
 -- used to make a colored tile ( can be used for making any type of tile) 
 makeWall :: Int -> Int -> Picture
-makeWall xBlock yBlock = color black ( polygon [(x,y),(x,y + tileSize),(x + tileSize,y + tileSize),(x + tileSize,y)])
+makeWall xBlock yBlock = color orange ( polygon [(x,y),(x,y + tileSize),(x + tileSize,y + tileSize),(x + tileSize,y)])
 	where 
 		x = (fromIntegral xBlock) * tileSize 
 		y = (fromIntegral yBlock) * tileSize 
@@ -45,10 +70,10 @@ makeWall xBlock yBlock = color black ( polygon [(x,y),(x,y + tileSize),(x + tile
 gameGrid :: Picture
 gameGrid = pictures $ [
 		-- makes a grid of n x n tile
-		( makeTile x y ) | x <- [0 , tileSize.. (n-1) * tileSize ] , y <- [0 , tileSize.. (n-1) * tileSize ]  
+		( makeTile x y ) | x <- [0 , tileSize.. (nF-1) * tileSize ] , y <- [0 , tileSize.. (nF-1) * tileSize ]  
 	] ++ [ makeFinish 0 1 ] ++ [ wallGrid  wallPos]
 	where
-		wallPos = [(0,0) , (0,2) , (2,2)]
+		wallPos = findAllB map0 (nI-1)
 
 
 gameAsPicture :: Picture -> Picture
