@@ -1,7 +1,6 @@
 module Game where
 
 import Data.Array
-
 data Player = Player { 
                 top             :: Int,
                 bottom  :: Int,
