@@ -1,16 +1,17 @@
 module Game where
 
 import Data.Array
-
+sizeX :: Int
 sizeX = floor (gridSize * nF+ lineWidth)
+sizeY :: Int
 sizeY = floor (gridSize * nF + lineWidth) 
 gridSize = 100.0
 lineWidth = 5.0
 
 nI :: Int
-nI = 5
+nI = 4
 nF :: Float
-nF = 5.0
+nF = 4.0
 
 tileSize :: Float
 tileSize = 100.0
@@ -18,11 +19,10 @@ tileSize = 100.0
 
 map0 :: [String]
 map0= [
-	 "wwwww",
-	 "eeesw",
-	 "wwwww",
-	 "wteee",
-	 "wwwww"
+	 "eeee",
+                        "seee",
+                        "eete",
+                        "eeee"
 	]
 
 findAnything :: [Char] -> Int -> Char -> [Int]
@@ -73,7 +73,7 @@ initBoard = array indexRange $ zip (range indexRange) (repeat Empty)
 	where indexRange = ((0, 0), (nI - 1, nI - 1))
 -- for each tuple ((Int,Int),Cell) put it in a Board
 readyBoard :: Board
-readyBoard = initBoard // tupleWall
+readyBoard = initBoard // tupleWall // tupleEmpty // tupleStart // tupleTarget
 
 initialGame = Game { gameBoard = readyBoard
                    , configPlayer = ConfigPlayer 6 1 3 4 5 2 
