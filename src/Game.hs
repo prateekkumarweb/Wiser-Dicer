@@ -19,27 +19,35 @@ tileSize = 100.0
 map0 :: [String]
 map0= [
 	 "wwwww",
-	 "eeeew",
+	 "eeesw",
 	 "wwwww",
-	 "weeee",
+	 "wteee",
 	 "wwwww"
 	]
 
-findWall :: [Char] -> Int -> [Int]
-findWall [] _ = []
-findWall (x:xs) i 
- | x == 'w' = i : findWall  xs (i+1)
- | otherwise = findWall xs (i+1)
+findAnything :: [Char] -> Int -> Char -> [Int]
+findAnything [] _ _= []
+findAnything (x:xs) i c 
+ | x == c = i : findAnything  xs (i+1) c
+ | otherwise = findAnything xs (i+1) c
 
-findAllWall :: [String] -> Int -> [(Int,Int)]
-findAllWall [] _ = []
-findAllWall  (x:xs) i = row ++ (findAllWall xs (i-1)) 
+findAllAnything :: [String] -> Int -> Char-> [(Int,Int)]
+findAllAnything [] _ _ = []
+findAllAnything (x:xs) i c = row ++ (findAllAnything xs (i-1) c) 
  	where
- 		row = [ (b,a) | b<- findWall x 0, let a = i ]
+ 		row = [ (b,a) | b<- findAnything x 0 c, let a = i ]
 
 -- make a tuple of ((Int,Int),wall) 
 tupleWall :: [((Int, Int),Cell)]
-tupleWall = zip (findAllWall map0 (nI-1)) $ repeat Wall
+tupleWall = zip (findAllAnything map0 (nI-1) 'w') $ repeat Wall
+tupleEmpty :: [((Int, Int),Cell)]
+tupleEmpty = zip (findAllAnything map0 (nI-1) 'e') $ repeat Empty
+tupleTarget :: [((Int, Int),Cell)]
+tupleTarget = zip (findAllAnything map0 (nI-1) 't') $ repeat Target
+tupleStart :: [((Int, Int),Cell)]
+tupleStart = zip (findAllAnything map0 (nI-1) 's') $ repeat Player
+tupleOnTarget :: [((Int, Int),Cell)]
+tupleOnTarget = zip (findAllAnything map0 (nI-1) 'o') $ repeat OnTarget
 
 data ConfigPlayer = ConfigPlayer { 
 		top		:: Int,
@@ -49,14 +57,15 @@ data ConfigPlayer = ConfigPlayer {
 		east 	:: Int,
 		west 	:: Int
 	} deriving (Eq, Show)
-data Cell = Wall | Player | Target (Int) | OnTarget | Empty deriving (Eq, Show)
+data Cell = Wall | Player | Target  | OnTarget | Empty deriving (Eq, Show)
 data GameState = Running | GameOver deriving (Eq, Show)
 type Board = Array (Int, Int) Cell
 
 data Game = Game { 
-		   gameBoard :: Board
-                 ,configPlayer :: ConfigPlayer
-                 ,gameState :: GameState
+		   gameBoard 		:: Board
+                 ,configPlayer 	:: ConfigPlayer
+                 ,gameState 		:: GameState
+                 ,finalTarget 	:: Int
                  } deriving (Eq, Show)
 
 initBoard :: Board
@@ -69,6 +78,7 @@ readyBoard = initBoard // tupleWall
 initialGame = Game { gameBoard = readyBoard
                    , configPlayer = ConfigPlayer 6 1 3 4 5 2 
                    , gameState = Running
+                   , finalTarget = 3
                    }
     
 

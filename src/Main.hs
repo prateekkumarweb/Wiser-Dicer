@@ -42,7 +42,11 @@ findAllB  (x:xs) i = row ++ (findAllB xs (i-1))
 
 -- adds finishing point at given block number ( can use maybe )
 makeFinish :: Int -> Int -> Picture
-makeFinish xBlock yBlock = translate ((fromIntegral xBlock) * tileSize + 25.0) ((fromIntegral yBlock) * tileSize + 25.0) $ scale 0.5 0.5 $ text "3"
+makeFinish xBlock yBlock = 
+	pictures [
+	makeWall xBlock yBlock green,
+	translate ((fromIntegral xBlock) * tileSize + 25.0) ((fromIntegral yBlock) * tileSize + 25.0) $ scale 0.5 0.5 $ text "3"
+	]
 
 makeTile :: Float -> Float -> Picture
 makeTile x y = pictures [
@@ -56,22 +60,22 @@ makeTile x y = pictures [
 wallGrid :: [(Int , Int)] -> Picture
 wallGrid [] = blank
 wallGrid ((x,y) : ls) = pictures [
-		makeWall x y,
+		makeWall x y (orange),
 		wallGrid ls
 	] 
 
 -- used to make a colored tile ( can be used for making any type of tile) 
-makeWall :: Int -> Int -> Picture
-makeWall xBlock yBlock = color orange ( polygon [(x,y),(x,y + tileSize),(x + tileSize,y + tileSize),(x + tileSize,y)])
+makeWall :: Int -> Int -> Color-> Picture
+makeWall xBlock yBlock icolor = color icolor ( polygon [(x,y),(x,y + tileSize),(x + tileSize,y + tileSize),(x + tileSize,y)])
 	where 
 		x = (fromIntegral xBlock) * tileSize 
 		y = (fromIntegral yBlock) * tileSize 
 
 gameGrid :: Picture
-gameGrid = pictures $ [
+gameGrid = pictures $ [ wallGrid  wallPos] ++ [ makeFinish 0 1 ] ++ [
 		-- makes a grid of n x n tile
 		( makeTile x y ) | x <- [0 , tileSize.. (nF-1) * tileSize ] , y <- [0 , tileSize.. (nF-1) * tileSize ]  
-	] ++ [ makeFinish 0 1 ] ++ [ wallGrid  wallPos]
+	] 
 	where
 		wallPos = findAllB map0 (nI-1)
 
