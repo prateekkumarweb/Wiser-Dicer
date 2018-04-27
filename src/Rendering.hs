@@ -53,11 +53,11 @@ snapPictureToCell cellPic (xBlock,yBlock) = translate x y cellPic
 cellPicPlayer :: ConfigPlayer -> Picture
 cellPicPlayer player = pictures [
 		makeWall 0 0 white,
-		translate (25.0) (25.0) $ scale 0.5 0.5 $ text topPlayer,
-		color (greyN 0.5) $ translate (-tileSize + 25.0) (25.0) $ scale 0.25 0.25 $ text eastPlayer,
-		color (greyN 0.5) $ translate (tileSize + 25.0) (25.0) $ scale 0.25 0.25 $ text westPlayer,
-		color (greyN 0.5) $ translate (25.0) (25.0 + tileSize) $ scale 0.25 0.25 $ text northPlayer,
-		color (greyN 0.5) $ translate (25.0) (25.0 - tileSize) $ scale 0.25 0.25 $ text southPlayer
+		translate tf tf $ scale (0.5*tileSize/100) (0.5*tileSize/100) $ text topPlayer,
+		color (greyN 0.5) $ translate (-tileSize + tf) (tf) $ scale tf2 tf2 $ text eastPlayer,
+		color (greyN 0.5) $ translate (tileSize + tf) (tf) $ scale tf2 tf2 $ text westPlayer,
+		color (greyN 0.5) $ translate (tf) (tf + tileSize) $ scale tf2 tf2 $ text northPlayer,
+		color (greyN 0.5) $ translate (tf) (tf - tileSize) $ scale tf2 tf2 $ text southPlayer
 	]	
 	where
 		topPlayer = show $ top player
@@ -65,15 +65,18 @@ cellPicPlayer player = pictures [
 		westPlayer = show $ west player
 		southPlayer = show $ south player
 		northPlayer = show $ north player
+		tf = (25.0*tileSize/100)
+		tf2 = (0.25*tileSize/100)
 
 
 cellPicTarget :: Int -> Picture
 cellPicTarget targetInt = pictures [
 		makeWall 0 0 green,
-		translate (25.0) (25.0) $ scale 0.5 0.5 $ text tInt
+		translate (25.0*mf) (25.0*mf) $ scale (0.5*mf) (0.5*mf) $ text tInt
 	]	
 	where
 		tInt = show targetInt
+		mf = tileSize/100
 
 cellPicWall :: Picture
 cellPicWall = pictures [
@@ -98,7 +101,7 @@ gameGrid game = pictures [
 
 makeFinal :: Game -> Picture -> Picture
 makeFinal game pic 
-	| (gameState game) == GameOver = pictures [ pic, translate (-tileSize) (-tileSize) $ scale 0.5 0.5 $ text "You Won"]
+	| (gameState game) == GameOver = pictures [ pic, translate (-tileSize) (-tileSize) $ scale (0.5*tileSize/100) (0.5*tileSize/100) $ text "You Won"]
 	| otherwise = pic
 
 -- change the names above

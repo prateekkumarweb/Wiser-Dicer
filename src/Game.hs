@@ -5,7 +5,7 @@ sizeX :: Int
 sizeX = floor (gridSize * nF+ lineWidth)
 sizeY :: Int
 sizeY = floor (gridSize * nF + lineWidth) 
-gridSize = 100.0
+gridSize = 50.0
 lineWidth = 5.0
 
 nI :: Int
@@ -14,7 +14,7 @@ nF :: Float
 nF = 5.0
 
 tileSize :: Float
-tileSize = 100.0
+tileSize = 50.0
 
 
 map0 :: [String]
