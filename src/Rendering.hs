@@ -2,8 +2,12 @@ module Rendering where
 
 import Data.Array
 import Game
+import Maps
+import Helper
 import Graphics.Gloss
 import Graphics.Gloss.Data.Color
+
+        
 
 makeTile :: Float -> Float -> Picture
 makeTile x y = pictures [
@@ -28,13 +32,17 @@ makeWall xBlock yBlock icolor = color icolor ( polygon [(x,y),(x,y + tileSize),(
 		x = (fromIntegral xBlock) * tileSize 
 		y = (fromIntegral yBlock) * tileSize 
 
-gameGridIntial :: Picture
-gameGridIntial = pictures $ [
+gameGridIntial :: Int -> Picture
+gameGridIntial i= pictures $ [
 		-- makes a grid of n x n tile
 		( makeTile x y ) | x <- [0 , tileSize.. (nF-1) * tileSize ] , y <- [0 , tileSize.. (nF-1) * tileSize ]  
 	] 
 	where
-		wallPos = findAllAnything map0 (nI-1)
+		-- wallPos = findAllAnything map0 (n-1)
+		-- map0 = (lMap $ maps !! i)
+		n = (nI $ maps !! i)
+		nF = fromIntegral n
+
 
 cellsOfBoard :: Board -> Cell -> Picture -> Picture
 cellsOfBoard board cell cellPicture =
@@ -53,11 +61,11 @@ snapPictureToCell cellPic (xBlock,yBlock) = translate x y cellPic
 cellPicPlayer :: ConfigPlayer -> Picture
 cellPicPlayer player = pictures [
 		makeWall 0 0 white,
-		translate (25.0) (25.0) $ scale 0.5 0.5 $ text topPlayer,
-		color (greyN 0.5) $ translate (-tileSize + 25.0) (25.0) $ scale 0.25 0.25 $ text eastPlayer,
-		color (greyN 0.5) $ translate (tileSize + 25.0) (25.0) $ scale 0.25 0.25 $ text westPlayer,
-		color (greyN 0.5) $ translate (25.0) (25.0 + tileSize) $ scale 0.25 0.25 $ text northPlayer,
-		color (greyN 0.5) $ translate (25.0) (25.0 - tileSize) $ scale 0.25 0.25 $ text southPlayer
+		translate tf tf $ scale (0.5*tileSize/100) (0.5*tileSize/100) $ text topPlayer,
+		color (greyN 0.5) $ translate (-tileSize + tf) (tf) $ scale tf2 tf2 $ text eastPlayer,
+		color (greyN 0.5) $ translate (tileSize + tf) (tf) $ scale tf2 tf2 $ text westPlayer,
+		color (greyN 0.5) $ translate (tf) (tf + tileSize) $ scale tf2 tf2 $ text northPlayer,
+		color (greyN 0.5) $ translate (tf) (tf - tileSize) $ scale tf2 tf2 $ text southPlayer
 	]	
 	where
 		topPlayer = show $ top player
@@ -65,15 +73,18 @@ cellPicPlayer player = pictures [
 		westPlayer = show $ west player
 		southPlayer = show $ south player
 		northPlayer = show $ north player
+		tf = (25.0*tileSize/100)
+		tf2 = (0.25*tileSize/100)
 
 
 cellPicTarget :: Int -> Picture
 cellPicTarget targetInt = pictures [
 		makeWall 0 0 green,
-		translate (25.0) (25.0) $ scale 0.5 0.5 $ text tInt
+		translate (25.0*mf) (25.0*mf) $ scale (0.5*mf) (0.5*mf) $ text tInt
 	]	
 	where
 		tInt = show targetInt
+		mf = tileSize/100
 
 cellPicWall :: Picture
 cellPicWall = pictures [
@@ -85,31 +96,110 @@ cellPicEmpty  = pictures [
 		makeWall 0 0 $ makeColorI 224 238 224 255
 	]	
 
-gameGrid :: Game -> Picture
-gameGrid game = pictures [
-		scoreboard game,
+gameGrid :: Int ->Game -> Picture
+gameGrid i game = pictures [
+		scoreboard i game,
 		cellsOfBoard board Empty cellPicEmpty,
 		cellsOfBoard board Wall cellPicWall,
 		snapPictureToCell ( cellPicTarget (snd (finalTarget game)) ) $ fst (finalTarget game),
-		cellsOfBoard board Player $ cellPicPlayer (configPlayer game),
-		gameGridIntial
+		cellsOfBoard board Player $ cellPicPlayer (playerConfigPlayer i game),
+		gameGridIntial (level game)
 	]
 	where
-		board = gameBoard game
+		board = playerBoard i game
 
-
-scoreboard :: Game ->Picture
-scoreboard game = pictures [translate (2*tileSize) (-tileSize) $ scale 0.5 0.5 $ text $ "Total Moves" ++ (show $ numberOfMoves game) ]
+------------changed
+scoreboard :: Int -> Game ->Picture
+scoreboard i game = pictures [translate (2*tileSize) (-tileSize) $ scale 0.5 0.5 $ text $ "Total Moves" ++ (show $ playerNumOfMoves i game) ]
 
 makeFinal :: Game -> Picture -> Picture
 makeFinal game pic 
-	| (gameState game) == GameOver = pictures [ pic, translate (-tileSize) (-tileSize) $ scale 0.5 0.5 $ text "You Won"]
+	| (gameState game) == GameOver = pictures [ pic, translate (-tileSize) (-tileSize) $ scale (0.5*tileSize/100) (0.5*tileSize/100) $ text "You Won"]
 	| otherwise = pic
+
+playerBoard :: Int -> Game -> Board
+playerBoard i game
+	| i == 0 = fst (gameBoard game)
+	| otherwise = snd (gameBoard game)
+
+playerConfigPlayer :: Int -> Game -> ConfigPlayer
+playerConfigPlayer i game
+	| i == 0 = fst (configPlayer game)
+	| otherwise = snd (configPlayer game)  
+
+playerNumOfMoves :: Int -> Game -> Int
+playerNumOfMoves i game
+	| i == 0 = fst (numberOfMoves game)
+	| otherwise = snd (numberOfMoves game)  
+
 
 -- change the names above
 gameAsPicture :: Game -> Picture
-gameAsPicture game = translate (fromIntegral sizeX * (-0.5))
-                               (fromIntegral sizeY * (-0.5))
-                               frame 
+gameAsPicture game = pictures [ 
+					  translate (fromIntegral(-n-1)*tileSize) ((-1)*fromIntegral(n)*tileSize/2) frame1
+					,translate (tileSize) ((-1)*fromIntegral(n+1)*tileSize/2) frame2
+					]
                 	where
-                        	frame = makeFinal game $ gameGrid game  	   
+                        	frame1 = makeFinal game $ gameGrid 0 game
+                        	frame2 = makeFinal game $ gameGrid 1 game
+                        	n = nI $ maps !! (level game) 
+				
+--
+makeOne :: Picture 
+makeOne = pictures[
+        translate (tileSize/2) (tileSize/2) $ circleSolid radius
+        ]
+        where
+            radius = tileSize/10
+            
+
+makeTwo :: Picture
+makeTwo = pictures[
+        translate (tileSize/3) (2*tileSize/3) $ circleSolid radius,
+        translate (2*tileSize/3) (tileSize/3) $ circleSolid radius
+        ]
+        where
+            radius = tileSize/10            
+
+
+makeThree :: Picture 
+makeThree = pictures[
+        translate (tileSize/4) (3*tileSize/4) $ circleSolid radius,
+        translate (3*tileSize/4) (tileSize/4) $ circleSolid radius,
+        translate (tileSize/2) (tileSize/2) $ circleSolid radius
+        ]
+        where
+            radius = tileSize/10        
+
+makeFour :: Picture
+makeFour  = pictures[
+        translate (tileSize/4) (3*tileSize/4) $ circleSolid radius,
+        translate (3*tileSize/4) (tileSize/4) $ circleSolid radius,
+        translate (3*tileSize/4) (3*tileSize/4) $ circleSolid radius,
+        translate (tileSize/4) (tileSize/4) $ circleSolid radius
+        ]
+        where
+            radius = tileSize/10            
+
+makeFive :: Picture
+makeFive  = pictures[
+        translate (tileSize/4) (3*tileSize/4) $ circleSolid radius,
+        translate (3*tileSize/4) (tileSize/4) $ circleSolid radius,
+        translate (3*tileSize/4) (3*tileSize/4) $ circleSolid radius,
+        translate (tileSize/4) (tileSize/4) $ circleSolid radius,
+        translate (tileSize/2) (tileSize/2) $ circleSolid radius
+        ]
+        where
+            radius = tileSize/10        
+
+makeSix :: Picture
+makeSix  = pictures[
+        translate (tileSize/4) (2*tileSize/3) $ circleSolid radius,
+        translate (tileSize/4) (tileSize/3) $ circleSolid radius,
+        translate (2*tileSize/4) (2*tileSize/3) $ circleSolid radius,
+        translate (2*tileSize/4) (tileSize/3) $ circleSolid radius,
+        translate (3*tileSize/4) (2*tileSize/3) $ circleSolid radius,
+        translate (3*tileSize/4) (tileSize/3) $ circleSolid radius
+        ]
+        where
+            radius = tileSize/10

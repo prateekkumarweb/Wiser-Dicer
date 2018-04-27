@@ -13,6 +13,6 @@ import Logic
 main :: IO ()
 main = play window backgroundColor 30 initialGame gameAsPicture transformGame (const id)
  where 
- 	window = InWindow "popl" (sizeX, sizeY) (100, 100)
+ 	window = FullScreen
 	backgroundColor = cyan
 	
