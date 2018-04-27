@@ -45,6 +45,47 @@ import Graphics.Gloss.Interface.Pure.Game
 --     where board = gameBoard game
 --           player = gamePlayer game
 
+moveConfigPlayerUp :: ConfigPlayer -> ConfigPlayer
+moveConfigPlayerUp  plyr = ConfigPlayer{
+	top = south plyr,
+	bottom = north plyr,
+	north = top plyr,
+	south = bottom plyr,
+	east =east plyr,
+	west = west plyr,
+}
+
+moveConfigPlayerDown :: ConfigPlayer -> ConfigPlayer
+moveConfigPlayerDown  plyr = ConfigPlayer{
+	top = north plyr,
+	bottom = south plyr,
+	north = bottom plyr,
+	south = top plyr,
+	east =east plyr,
+	west = west plyr,
+}
+
+moveConfigPlayerRight :: ConfigPlayer -> ConfigPlayer
+moveConfigPlayerRight  plyr = ConfigPlayer{
+	top = east plyr,
+	bottom = west plyr,
+	north = north plyr,
+	south = south plyr,
+	east = bottom plyr,
+	west = top plyr,
+}
+
+moveConfigPlayerLeft :: ConfigPlayer -> ConfigPlayer
+moveConfigPlayerLeft  plyr = ConfigPlayer{
+	top = west plyr,
+	bottom = east plyr,
+	north = north plyr,
+	south = south plyr,
+	east = top plyr,
+	west = bottom plyr,
+}
+
+
 allReachableCoords :: Board -> [(Int,Int)]
 allReachableCoords board = map fst $ filter (\(_, e) -> e /= Wall)  (assocs board) 
 findCoordsPlayer :: Board -> (Int,Int)
