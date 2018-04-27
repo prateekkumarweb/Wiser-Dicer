@@ -90,12 +90,16 @@ gameGrid game = pictures [
 		cellsOfBoard board Empty cellPicEmpty,
 		cellsOfBoard board Wall cellPicWall,
 		snapPictureToCell ( cellPicTarget (snd (finalTarget game)) ) $ fst (finalTarget game),
-		-- cellsOfBoard board Target $ cellPicTarget (finalTarget game),
 		cellsOfBoard board Player $ cellPicPlayer (configPlayer game),
 		gameGridIntial
 	]
 	where
 		board = gameBoard game
+
+makeFinal :: Game -> Picture -> Picture
+makeFinal game pic 
+	| (gameState game) == GameOver = pictures [ pic, translate (-tileSize) (-tileSize) $ scale 0.5 0.5 $ text "You Won"]
+	| otherwise = pic
 
 -- change the names above
 gameAsPicture :: Game -> Picture
@@ -103,4 +107,4 @@ gameAsPicture game = translate (fromIntegral sizeX * (-0.5))
                                (fromIntegral sizeY * (-0.5))
                                frame 
                 	where
-                        	frame = gameGrid game  	   
+                        	frame = makeFinal game $ gameGrid game  	   

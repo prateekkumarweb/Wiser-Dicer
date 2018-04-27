@@ -9,9 +9,9 @@ gridSize = 100.0
 lineWidth = 5.0
 
 nI :: Int
-nI = 4
+nI = 5
 nF :: Float
-nF = 4.0
+nF = 5.0
 
 tileSize :: Float
 tileSize = 100.0
@@ -19,10 +19,11 @@ tileSize = 100.0
 
 map0 :: [String]
 map0= [
-	 		"eewe",
-                        "eeew",
-                        "sete",
-                        "weee"
+	 		"eewee",
+                        "eeewe",
+                        "setee",
+                        "weeee",
+                        "weeew"
 	]
 
 findAnything :: [Char] -> Int -> Char -> [Int]
@@ -78,7 +79,7 @@ readyBoard = initBoard // tupleWall // tupleEmpty // tupleStart // tupleTarget
 initialGame = Game { gameBoard = readyBoard
                    , configPlayer = ConfigPlayer 6 1 3 4 5 2 
                    , gameState = Running
-                   , finalTarget = ((2,1),3)
+                   , finalTarget = ((2,2),3)
                    }
     
 
