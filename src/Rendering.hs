@@ -61,29 +61,29 @@ snapPictureToCell cellPic (xBlock,yBlock) = translate x y cellPic
 cellPicPlayer :: ConfigPlayer -> Picture
 cellPicPlayer player = pictures [
 		makeWall 0 0 white,
-		translate tf tf $ scale (0.5*tileSize/100) (0.5*tileSize/100) $ text topPlayer,
-		color (greyN 0.5) $ translate (-tileSize + tf) (tf) $ scale tf2 tf2 $ text eastPlayer,
-		color (greyN 0.5) $ translate (tileSize + tf) (tf) $ scale tf2 tf2 $ text westPlayer,
-		color (greyN 0.5) $ translate (tf) (tf + tileSize) $ scale tf2 tf2 $ text northPlayer,
-		color (greyN 0.5) $ translate (tf) (tf - tileSize) $ scale tf2 tf2 $ text southPlayer
+		translate tf tf $ scale (0.75*tileSize/100) (0.75*tileSize/100) $ topPlayer,
+		color (greyN 0.5) $ translate (-tileSize/3 ) (tileSize/2.5) $ scale tf2 tf2 $  westPlayer,
+		color (greyN 0.5) $ translate (tileSize + tileSize/6) (tileSize/2.5) $ scale tf2 tf2 $  eastPlayer,
+		color (greyN 0.5) $ translate (tileSize/2.5) (tileSize/6 + tileSize) $ scale tf2 tf2 $  northPlayer,
+		color (greyN 0.5) $ translate (tileSize/2.5) (-tileSize/3) $ scale tf2 tf2 $  southPlayer
 	]	
 	where
-		topPlayer = show $ top player
-		eastPlayer = show $ east player
-		westPlayer = show $ west player
-		southPlayer = show $ south player
-		northPlayer = show $ north player
-		tf = (25.0*tileSize/100)
+		topPlayer = makeI $ top player
+		eastPlayer = makeI $ east player
+		westPlayer = makeI $ west player
+		southPlayer = makeI $ south player
+		northPlayer = makeI $ north player
+		tf = (15.0*tileSize/100)
 		tf2 = (0.25*tileSize/100)
 
 
 cellPicTarget :: Int -> Picture
 cellPicTarget targetInt = pictures [
 		makeWall 0 0 green,
-		translate (25.0*mf) (25.0*mf) $ scale (0.5*mf) (0.5*mf) $ text tInt
+		translate (15.0*mf) (15.0*mf) $ scale (0.75*mf) (0.75*mf) $ makeI tInt
 	]	
 	where
-		tInt = show targetInt
+		tInt = targetInt
 		mf = tileSize/100
 
 cellPicWall :: Picture
@@ -145,6 +145,18 @@ gameAsPicture game = pictures [
                         	n = nI $ maps !! (level game) 
 				
 --
+makeI :: Int -> Picture
+makeI i =
+	case i of
+		1 -> makeOne
+		2 -> makeTwo
+		3 -> makeThree
+		4 -> makeFour
+		5 -> makeFive
+		6 -> makeSix
+
+
+
 makeOne :: Picture 
 makeOne = pictures[
         translate (tileSize/2) (tileSize/2) $ circleSolid radius
