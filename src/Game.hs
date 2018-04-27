@@ -65,7 +65,7 @@ data Game = Game {
 		   gameBoard 		:: Board
                  ,configPlayer 	:: ConfigPlayer
                  ,gameState 		:: GameState
-                 ,finalTarget 	:: Int
+                 ,finalTarget 	:: ((Int,Int),Int)
                  } deriving (Eq, Show)
 
 initBoard :: Board
@@ -78,7 +78,7 @@ readyBoard = initBoard // tupleWall // tupleEmpty // tupleStart // tupleTarget
 initialGame = Game { gameBoard = readyBoard
                    , configPlayer = ConfigPlayer 6 1 3 4 5 2 
                    , gameState = Running
-                   , finalTarget = 3
+                   , finalTarget = ((2,1),3)
                    }
     
 

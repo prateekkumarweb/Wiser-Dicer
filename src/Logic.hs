@@ -85,7 +85,6 @@ moveConfigPlayerLeft  plyr = ConfigPlayer{
 	west = bottom plyr
 }
 
-
 allReachableCoords :: Board -> [(Int,Int)]
 allReachableCoords board = map fst $ filter (\(_, e) -> e /= Wall)  (assocs board) 
 findCoordsPlayer :: Board -> (Int,Int)
@@ -113,7 +112,8 @@ checkMove i j game = checkNewCoord i j (gameBoard game) $ findCoordsPlayer $ gam
 checkAndMove :: Int -> Int -> Game -> Game
 checkAndMove i j game 
     | checkMove i j game = game { gameBoard = (gameBoard game) // [((x,y),Empty),((x+i,y+j),Player)] ,
-    							configPlayer = moveConfigPlayer i j (configPlayer game) }
+    							configPlayer = moveConfigPlayer i j (configPlayer game)
+    							}
     | otherwise = game
     where
       (x,y) = findCoordsPlayer $ gameBoard game
@@ -127,9 +127,18 @@ movePlayer game key =
       (SpecialKey KeyLeft) -> checkAndMove (-1) 0 game 
       otherwise -> game
 
+checkVictory :: Game -> Game
+checkVictory game 
+	| playerCoords == targetCoords && topI == targetI  = game { gameState = GameOver }
+	| otherwise = game
+	where
+		playerCoords = findCoordsPlayer $ gameBoard game
+		targetCoords = fst $ finalTarget game
+		topI = top (configPlayer game)
+		targetI = snd ( finalTarget game )
 
 transformGame (EventKey key Up _ _) game =
     case gameState game of
-      Running -> movePlayer game key
-      GameOver -> initialGame
+      Running -> checkVictory $ movePlayer game key
+      GameOver -> game
 transformGame _ game = game

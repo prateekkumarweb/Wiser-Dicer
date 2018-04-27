@@ -5,14 +5,6 @@ import Game
 import Graphics.Gloss
 import Graphics.Gloss.Data.Color
 
--- adds finishing point at given block number ( can use maybe )
-makeFinish :: Int -> Int -> Picture
-makeFinish xBlock yBlock = 
-	pictures [
-	makeWall xBlock yBlock green,
-	translate ((fromIntegral xBlock) * tileSize + 25.0) ((fromIntegral yBlock) * tileSize + 25.0) $ scale 0.5 0.5 $ text "3"
-	]
-
 makeTile :: Float -> Float -> Picture
 makeTile x y = pictures [
 		line[ (x , y) , (x , y + tileSize)],
@@ -97,7 +89,8 @@ gameGrid :: Game -> Picture
 gameGrid game = pictures [
 		cellsOfBoard board Empty cellPicEmpty,
 		cellsOfBoard board Wall cellPicWall,
-		cellsOfBoard board Target $ cellPicTarget (finalTarget game),
+		snapPictureToCell ( cellPicTarget (snd (finalTarget game)) ) $ fst (finalTarget game),
+		-- cellsOfBoard board Target $ cellPicTarget (finalTarget game),
 		cellsOfBoard board Player $ cellPicPlayer (configPlayer game),
 		gameGridIntial
 	]
