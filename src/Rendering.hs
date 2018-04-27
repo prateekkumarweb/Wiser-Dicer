@@ -7,8 +7,7 @@ import Helper
 import Graphics.Gloss
 import Graphics.Gloss.Data.Color
 
-        translate (-(n+1)*tileSize) -n*tileSize/2
-        translate tileSize -n*tileSize/2
+        
 
 makeTile :: Float -> Float -> Picture
 makeTile x y = pictures [
