@@ -110,11 +110,11 @@ gameGrid i game = pictures [
 
 ------------changed
 scoreboard :: Int -> Game ->Picture
-scoreboard i game = pictures [translate (2*tileSize) (-tileSize) $ scale 0.5 0.5 $ text $ "Total Moves" ++ (show $ playerNumOfMoves i game) ]
+scoreboard i game = pictures [translate (1.5*tileSize) (-tileSize) $ scale 0.2 0.2 $ text $ "Total Moves" ++ (show $ playerNumOfMoves i game) ]
 
 makeFinal :: Game -> Picture -> Picture
 makeFinal game pic 
-	| (gameState game) == GameOver = pictures [ pic, translate (-tileSize) (-tileSize) $ scale (0.5*tileSize/100) (0.5*tileSize/100) $ text "You Won"]
+	| (gameState game) == GameOver = pictures [ pic, translate (-tileSize) (-tileSize) $ scale (0.2*tileSize/100) (0.2*tileSize/100) $ text "You Won"]
 	| otherwise = pic
 
 playerBoard :: Int -> Game -> Board
@@ -137,7 +137,7 @@ playerNumOfMoves i game
 gameAsPicture :: Game -> Picture
 gameAsPicture game = pictures [ 
 					  translate (fromIntegral(-n-1)*tileSize) ((-1)*fromIntegral(n)*tileSize/2) frame1
-					,translate (tileSize) ((-1)*fromIntegral(n+1)*tileSize/2) frame2
+					,translate (tileSize/2) ((-1)*fromIntegral(n)*tileSize/2) frame2
 					]
                 	where
                         	frame1 = makeFinal game $ gameGrid 0 game
