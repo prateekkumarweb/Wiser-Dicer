@@ -60,11 +60,20 @@ snapPictureToCell cellPic (xBlock,yBlock) = translate x y cellPic
 
 cellPicPlayer :: ConfigPlayer -> Picture
 cellPicPlayer player = pictures [
-		makeWall 0 0 yellow,
-		translate (25.0) (25.0) $ scale 0.5 0.5 $ text topPlayer
+		makeWall 0 0 white,
+		translate (25.0) (25.0) $ scale 0.5 0.5 $ text topPlayer,
+		color (greyN 0.5) $ translate (-tileSize + 25.0) (25.0) $ scale 0.25 0.25 $ text eastPlayer,
+		color (greyN 0.5) $ translate (tileSize + 25.0) (25.0) $ scale 0.25 0.25 $ text westPlayer,
+		color (greyN 0.5) $ translate (25.0) (25.0 + tileSize) $ scale 0.25 0.25 $ text northPlayer,
+		color (greyN 0.5) $ translate (25.0) (25.0 - tileSize) $ scale 0.25 0.25 $ text southPlayer
 	]	
 	where
 		topPlayer = show $ top player
+		eastPlayer = show $ east player
+		westPlayer = show $ west player
+		southPlayer = show $ south player
+		northPlayer = show $ north player
+
 
 cellPicTarget :: Int -> Picture
 cellPicTarget targetInt = pictures [
@@ -76,12 +85,12 @@ cellPicTarget targetInt = pictures [
 
 cellPicWall :: Picture
 cellPicWall = pictures [
-		makeWall 0 0 orange
+		makeWall 0 0 $ makeColorI 139 71 38 255
 	]	
 
 cellPicEmpty :: Picture
 cellPicEmpty  = pictures [
-		makeWall 0 0 white
+		makeWall 0 0 $ makeColorI 224 238 224 255
 	]	
 
 gameGrid :: Game -> Picture

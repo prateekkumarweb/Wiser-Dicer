@@ -52,7 +52,7 @@ moveConfigPlayerUp  plyr = ConfigPlayer{
 	north = top plyr,
 	south = bottom plyr,
 	east =east plyr,
-	west = west plyr,
+	west = west plyr
 }
 
 moveConfigPlayerDown :: ConfigPlayer -> ConfigPlayer
@@ -62,7 +62,7 @@ moveConfigPlayerDown  plyr = ConfigPlayer{
 	north = bottom plyr,
 	south = top plyr,
 	east =east plyr,
-	west = west plyr,
+	west = west plyr
 }
 
 moveConfigPlayerRight :: ConfigPlayer -> ConfigPlayer
@@ -72,7 +72,7 @@ moveConfigPlayerRight  plyr = ConfigPlayer{
 	north = north plyr,
 	south = south plyr,
 	east = bottom plyr,
-	west = top plyr,
+	west = top plyr
 }
 
 moveConfigPlayerLeft :: ConfigPlayer -> ConfigPlayer
@@ -82,7 +82,7 @@ moveConfigPlayerLeft  plyr = ConfigPlayer{
 	north = north plyr,
 	south = south plyr,
 	east = top plyr,
-	west = bottom plyr,
+	west = bottom plyr
 }
 
 
@@ -96,6 +96,15 @@ findCoordsPlayer board = fst $ ( filter (\(_, e) -> e == Player)  (assocs board)
 -- i=-1, j=0 move left
 
 -- coord can be on empty, target or player 
+moveConfigPlayer :: Int -> Int ->ConfigPlayer -> ConfigPlayer
+moveConfigPlayer i j plyr = 
+	case (i,j) of
+		(0,1) -> moveConfigPlayerUp plyr 
+		(0,-1) -> moveConfigPlayerDown plyr 
+		(1,0) -> moveConfigPlayerRight plyr 
+		(-1,0) -> moveConfigPlayerLeft plyr 
+		otherwise -> plyr
+
 checkNewCoord ::Int -> Int -> Board -> (Int,Int) -> Bool
 checkNewCoord i j board (x,y) = elem (x+i,y+j) $ allReachableCoords board
 checkMove :: Int -> Int-> Game -> Bool
@@ -103,7 +112,8 @@ checkMove i j game = checkNewCoord i j (gameBoard game) $ findCoordsPlayer $ gam
 
 checkAndMove :: Int -> Int -> Game -> Game
 checkAndMove i j game 
-    | checkMove i j game = game { gameBoard = (gameBoard game) // [((x,y),Empty),((x+i,y+j),Player)] }
+    | checkMove i j game = game { gameBoard = (gameBoard game) // [((x,y),Empty),((x+i,y+j),Player)] ,
+    							configPlayer = moveConfigPlayer i j (configPlayer game) }
     | otherwise = game
     where
       (x,y) = findCoordsPlayer $ gameBoard game

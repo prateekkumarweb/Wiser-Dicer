@@ -14,5 +14,5 @@ main :: IO ()
 main = play window backgroundColor 30 initialGame gameAsPicture transformGame (const id)
  where 
  	window = InWindow "popl" (sizeX, sizeY) (100, 100)
-	backgroundColor = makeColor 255 255 255 128
+	backgroundColor = cyan
 	
