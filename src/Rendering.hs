@@ -114,8 +114,14 @@ scoreboard i game = pictures [translate (1.5*tileSize) (-tileSize) $ scale 0.2 0
 
 makeFinal :: Game -> Picture -> Picture
 makeFinal game pic 
-	| (gameState game) == GameOver = pictures [ pic, translate (-tileSize) (-tileSize) $ scale (0.2*tileSize/100) (0.2*tileSize/100) $ text "You Won"]
+	| (gameState game) == GameOver = pictures [ pic, whoWon game]
 	| otherwise = pic
+
+whoWon :: Game -> Picture
+whoWon game 
+		| (isPlaying game) == Player0 = translate (-tileSize) (-tileSize) $ scale (0.2*tileSize/100) (0.2*tileSize/100) $ text "Winner Player2"
+		| otherwise =  translate (-tileSize) (-tileSize) $ scale (0.2*tileSize/100) (0.2*tileSize/100) $ text "Winner Player1"
+
 
 playerBoard :: Int -> Game -> Board
 playerBoard i game
@@ -132,19 +138,6 @@ playerNumOfMoves i game
 	| i == 0 = fst (numberOfMoves game)
 	| otherwise = snd (numberOfMoves game)  
 
-
--- change the names above
-gameAsPicture :: Game -> Picture
-gameAsPicture game = pictures [ 
-					  translate (fromIntegral(-n-1)*tileSize) ((-1)*fromIntegral(n)*tileSize/2) frame1
-					,translate (tileSize/2) ((-1)*fromIntegral(n)*tileSize/2) frame2
-					]
-                	where
-                        	frame1 = makeFinal game $ gameGrid 0 game
-                        	frame2 = makeFinal game $ gameGrid 1 game
-                        	n = nI $ maps !! (level game) 
-				
---
 makeI :: Int -> Picture
 makeI i =
 	case i of
@@ -215,3 +208,14 @@ makeSix  = pictures[
         ]
         where
             radius = tileSize/10
+
+-- change the names above
+gameAsPicture :: Game -> Picture
+gameAsPicture game = pictures [ line [(0,-1000),(0,1000)] 
+					 , translate (fromIntegral(-n-1)*tileSize) ((-1)*fromIntegral(n)*tileSize/2) frame1
+					,translate (tileSize/2) ((-1)*fromIntegral(n)*tileSize/2) frame2
+					]
+                	where
+                        	frame1 = makeFinal game $ gameGrid 0 game
+                        	frame2 = makeFinal game $ gameGrid 1 game
+                        	n = nI $ maps !! (level game) 

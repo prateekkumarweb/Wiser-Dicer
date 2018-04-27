@@ -27,8 +27,7 @@ maps = [
        Level { lMap = (["eewww",
                         "seeee",
                         "eewee",
-                        "eewee",
-                        "eeete"],["eewww",
+                        "eewte"],[
                         "seeee",
                         "eewee",
                         "eewee",
@@ -36,7 +35,7 @@ maps = [
               , lStartPos = ((0,3),(0,3))
         , config = ([6,1,4,3,2,5],[6,1,4,3,2,5])
         , final = ((3,0),5)
-        , nI = 5
+        , nI = 4
               },
        Level { lMap = (["wwww",
                         "wsee",
