@@ -36,8 +36,8 @@ gameGridIntial i= pictures $ [
 		( makeTile x y ) | x <- [0 , tileSize.. (nF-1) * tileSize ] , y <- [0 , tileSize.. (nF-1) * tileSize ]  
 	] 
 	where
-		wallPos = findAllAnything map0 (n-1)
-		map0 = (lMap $ maps !! i)
+		-- wallPos = findAllAnything map0 (n-1)
+		-- map0 = (lMap $ maps !! i)
 		n = (nI $ maps !! i)
 		nF = fromIntegral n
 
@@ -94,32 +94,51 @@ cellPicEmpty  = pictures [
 		makeWall 0 0 $ makeColorI 224 238 224 255
 	]	
 
-gameGrid :: Game -> Picture
-gameGrid game = pictures [
-		scoreboard game,
+gameGrid :: Int ->Game -> Picture
+gameGrid i game = pictures [
+		scoreboard i game,
 		cellsOfBoard board Empty cellPicEmpty,
 		cellsOfBoard board Wall cellPicWall,
 		snapPictureToCell ( cellPicTarget (snd (finalTarget game)) ) $ fst (finalTarget game),
-		cellsOfBoard board Player $ cellPicPlayer (configPlayer game),
+		cellsOfBoard board Player $ cellPicPlayer (playerConfigPlayer i game),
 		gameGridIntial (level game)
 	]
 	where
-		board = gameBoard game
+		board = playerBoard i game
 
-
-scoreboard :: Game ->Picture
-scoreboard game = pictures [translate (2*tileSize) (-tileSize) $ scale 0.5 0.5 $ text $ "Total Moves" ++ (show $ numberOfMoves game) ]
+------------changed
+scoreboard :: Int -> Game ->Picture
+scoreboard i game = pictures [translate (2*tileSize) (-tileSize) $ scale 0.5 0.5 $ text $ "Total Moves" ++ (show $ playerNumOfMoves i game) ]
 
 makeFinal :: Game -> Picture -> Picture
 makeFinal game pic 
 	| (gameState game) == GameOver = pictures [ pic, translate (-tileSize) (-tileSize) $ scale (0.5*tileSize/100) (0.5*tileSize/100) $ text "You Won"]
 	| otherwise = pic
 
+playerBoard :: Int -> Game -> Board
+playerBoard i game
+	| i == 0 = fst (gameBoard game)
+	| otherwise = snd (gameBoard game)
+
+playerConfigPlayer :: Int -> Game -> ConfigPlayer
+playerConfigPlayer i game
+	| i == 0 = fst (configPlayer game)
+	| otherwise = snd (configPlayer game)  
+
+playerNumOfMoves :: Int -> Game -> Int
+playerNumOfMoves i game
+	| i == 0 = fst (numberOfMoves game)
+	| otherwise = snd (numberOfMoves game)  
+
+
 -- change the names above
 gameAsPicture :: Game -> Picture
-gameAsPicture game = translate shift shift
-                               	frame 
+gameAsPicture game = pictures [ 
+					  translate (fromIntegral(-n-1)*tileSize) ((-1)*fromIntegral(n)*tileSize/2) frame1
+					,translate (tileSize) ((-1)*fromIntegral(n+1)*tileSize/2) frame2
+					]
                 	where
-                        	frame = makeFinal game $ gameGrid game
+                        	frame1 = makeFinal game $ gameGrid 0 game
+                        	frame2 = makeFinal game $ gameGrid 1 game
                         	n = nI $ maps !! (level game) 
-                        	shift = (-1)*(fromIntegral n)/2 * tileSize
+
