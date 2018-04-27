@@ -123,3 +123,64 @@ gameAsPicture game = translate shift shift
                         	frame = makeFinal game $ gameGrid game
                         	n = nI $ maps !! (level game) 
                         	shift = (-1)*(fromIntegral n)/2 * tileSize
+				
+--
+makeOne :: Picture 
+makeOne = pictures[
+        translate (tileSize/2) (tileSize/2) $ circleSolid radius
+        ]
+        where
+            radius = tileSize/10
+            
+
+makeTwo :: Picture
+makeTwo = pictures[
+        translate (tileSize/3) (2*tileSize/3) $ circleSolid radius,
+        translate (2*tileSize/3) (tileSize/3) $ circleSolid radius
+        ]
+        where
+            radius = tileSize/10            
+
+
+makeThree :: Picture 
+makeThree = pictures[
+        translate (tileSize/4) (3*tileSize/4) $ circleSolid radius,
+        translate (3*tileSize/4) (tileSize/4) $ circleSolid radius,
+        translate (tileSize/2) (tileSize/2) $ circleSolid radius
+        ]
+        where
+            radius = tileSize/10        
+
+makeFour :: Picture
+makeFour  = pictures[
+        translate (tileSize/4) (3*tileSize/4) $ circleSolid radius,
+        translate (3*tileSize/4) (tileSize/4) $ circleSolid radius,
+        translate (3*tileSize/4) (3*tileSize/4) $ circleSolid radius,
+        translate (tileSize/4) (tileSize/4) $ circleSolid radius
+        ]
+        where
+            radius = tileSize/10            
+
+makeFive :: Picture
+makeFive  = pictures[
+        translate (tileSize/4) (3*tileSize/4) $ circleSolid radius,
+        translate (3*tileSize/4) (tileSize/4) $ circleSolid radius,
+        translate (3*tileSize/4) (3*tileSize/4) $ circleSolid radius,
+        translate (tileSize/4) (tileSize/4) $ circleSolid radius,
+        translate (tileSize/2) (tileSize/2) $ circleSolid radius
+        ]
+        where
+            radius = tileSize/10        
+
+makeSix :: Picture
+makeSix  = pictures[
+        translate (tileSize/4) (2*tileSize/3) $ circleSolid radius,
+        translate (tileSize/4) (tileSize/3) $ circleSolid radius,
+        translate (2*tileSize/4) (2*tileSize/3) $ circleSolid radius,
+        translate (2*tileSize/4) (tileSize/3) $ circleSolid radius,
+        translate (3*tileSize/4) (2*tileSize/3) $ circleSolid radius,
+        translate (3*tileSize/4) (tileSize/3) $ circleSolid radius
+        ]
+        where
+            radius = tileSize/10
+--
