@@ -2,6 +2,8 @@ module Rendering where
 
 import Data.Array
 import Game
+import Maps
+import Helper
 import Graphics.Gloss
 import Graphics.Gloss.Data.Color
 
@@ -28,13 +30,17 @@ makeWall xBlock yBlock icolor = color icolor ( polygon [(x,y),(x,y + tileSize),(
 		x = (fromIntegral xBlock) * tileSize 
 		y = (fromIntegral yBlock) * tileSize 
 
-gameGridIntial :: Picture
-gameGridIntial = pictures $ [
+gameGridIntial :: Int -> Picture
+gameGridIntial i= pictures $ [
 		-- makes a grid of n x n tile
 		( makeTile x y ) | x <- [0 , tileSize.. (nF-1) * tileSize ] , y <- [0 , tileSize.. (nF-1) * tileSize ]  
 	] 
 	where
-		wallPos = findAllAnything map0 (nI-1)
+		wallPos = findAllAnything map0 (n-1)
+		map0 = (lMap $ maps !! i)
+		n = (nI $ maps !! i)
+		nF = fromIntegral n
+
 
 cellsOfBoard :: Board -> Cell -> Picture -> Picture
 cellsOfBoard board cell cellPicture =
@@ -95,7 +101,7 @@ gameGrid game = pictures [
 		cellsOfBoard board Wall cellPicWall,
 		snapPictureToCell ( cellPicTarget (snd (finalTarget game)) ) $ fst (finalTarget game),
 		cellsOfBoard board Player $ cellPicPlayer (configPlayer game),
-		gameGridIntial
+		gameGridIntial (level game)
 	]
 	where
 		board = gameBoard game
@@ -111,8 +117,9 @@ makeFinal game pic
 
 -- change the names above
 gameAsPicture :: Game -> Picture
-gameAsPicture game = translate (fromIntegral sizeX * (-0.5))
-                               (fromIntegral sizeY * (-0.5))
-                               frame 
+gameAsPicture game = translate shift shift
+                               	frame 
                 	where
-                        	frame = makeFinal game $ gameGrid game  	   
+                        	frame = makeFinal game $ gameGrid game
+                        	n = nI $ maps !! (level game) 
+                        	shift = (-1)*(fromIntegral n)/2 * tileSize

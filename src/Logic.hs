@@ -2,7 +2,7 @@ module Logic where
 
 import Data.Array
 import Data.Foldable ( asum )
-
+import Helper
 import Game
 import Graphics.Gloss.Interface.Pure.Game
 
@@ -139,8 +139,17 @@ checkVictory game
 		topI = top (configPlayer game)
 		targetI = snd ( finalTarget game )
 
+changeGame :: Int -> Game
+changeGame i = initGameForMapLevel i 
+
+startNewGame :: Game -> Key -> Game
+startNewGame game key 
+	| key == (SpecialKey KeySpace) = changeGame $ (level game) + 1
+	| otherwise = game
+
+
 transformGame (EventKey key Up _ _) game =
     case gameState game of
       Running -> checkVictory $ movePlayer game key
-      GameOver -> game
+      GameOver -> startNewGame game key
 transformGame _ game = game
