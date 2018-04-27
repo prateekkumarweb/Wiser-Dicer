@@ -19,10 +19,10 @@ tileSize = 100.0
 
 map0 :: [String]
 map0= [
-	 "eeee",
-                        "seee",
-                        "eete",
-                        "eeee"
+	 		"eewe",
+                        "eeew",
+                        "sete",
+                        "weee"
 	]
 
 findAnything :: [Char] -> Int -> Char -> [Int]
