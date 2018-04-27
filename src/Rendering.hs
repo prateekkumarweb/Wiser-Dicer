@@ -90,6 +90,7 @@ cellPicEmpty  = pictures [
 
 gameGrid :: Game -> Picture
 gameGrid game = pictures [
+		scoreboard game,
 		cellsOfBoard board Empty cellPicEmpty,
 		cellsOfBoard board Wall cellPicWall,
 		snapPictureToCell ( cellPicTarget (snd (finalTarget game)) ) $ fst (finalTarget game),
@@ -98,6 +99,10 @@ gameGrid game = pictures [
 	]
 	where
 		board = gameBoard game
+
+
+scoreboard :: Game ->Picture
+scoreboard game = pictures [translate (2*tileSize) (-tileSize) $ scale 0.5 0.5 $ text $ "Total Moves" ++ (show $ numberOfMoves game) ]
 
 makeFinal :: Game -> Picture -> Picture
 makeFinal game pic 

@@ -112,8 +112,10 @@ checkMove i j game = checkNewCoord i j (gameBoard game) $ findCoordsPlayer $ gam
 checkAndMove :: Int -> Int -> Game -> Game
 checkAndMove i j game 
     | checkMove i j game = game { gameBoard = (gameBoard game) // [((x,y),Empty),((x+i,y+j),Player)] ,
-    							configPlayer = moveConfigPlayer i j (configPlayer game)
+    							configPlayer = moveConfigPlayer i j (configPlayer game),
+    							numberOfMoves = (numberOfMoves game) + 1
     							}
+
     | otherwise = game
     where
       (x,y) = findCoordsPlayer $ gameBoard game

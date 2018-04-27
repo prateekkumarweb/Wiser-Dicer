@@ -67,6 +67,7 @@ data Game = Game {
                  ,configPlayer 	:: ConfigPlayer
                  ,gameState 		:: GameState
                  ,finalTarget 	:: ((Int,Int),Int)
+                 ,numberOfMoves :: Int
                  } deriving (Eq, Show)
 
 initBoard :: Board
@@ -80,6 +81,7 @@ initialGame = Game { gameBoard = readyBoard
                    , configPlayer = ConfigPlayer 6 1 3 4 5 2 
                    , gameState = Running
                    , finalTarget = ((2,2),3)
+                   , numberOfMoves =0 
                    }
     
 
