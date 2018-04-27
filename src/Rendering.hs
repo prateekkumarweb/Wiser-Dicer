@@ -7,6 +7,8 @@ import Helper
 import Graphics.Gloss
 import Graphics.Gloss.Data.Color
 
+        
+
 makeTile :: Float -> Float -> Picture
 makeTile x y = pictures [
 		line[ (x , y) , (x , y + tileSize)],
@@ -141,4 +143,63 @@ gameAsPicture game = pictures [
                         	frame1 = makeFinal game $ gameGrid 0 game
                         	frame2 = makeFinal game $ gameGrid 1 game
                         	n = nI $ maps !! (level game) 
+				
+--
+makeOne :: Picture 
+makeOne = pictures[
+        translate (tileSize/2) (tileSize/2) $ circleSolid radius
+        ]
+        where
+            radius = tileSize/10
+            
 
+makeTwo :: Picture
+makeTwo = pictures[
+        translate (tileSize/3) (2*tileSize/3) $ circleSolid radius,
+        translate (2*tileSize/3) (tileSize/3) $ circleSolid radius
+        ]
+        where
+            radius = tileSize/10            
+
+
+makeThree :: Picture 
+makeThree = pictures[
+        translate (tileSize/4) (3*tileSize/4) $ circleSolid radius,
+        translate (3*tileSize/4) (tileSize/4) $ circleSolid radius,
+        translate (tileSize/2) (tileSize/2) $ circleSolid radius
+        ]
+        where
+            radius = tileSize/10        
+
+makeFour :: Picture
+makeFour  = pictures[
+        translate (tileSize/4) (3*tileSize/4) $ circleSolid radius,
+        translate (3*tileSize/4) (tileSize/4) $ circleSolid radius,
+        translate (3*tileSize/4) (3*tileSize/4) $ circleSolid radius,
+        translate (tileSize/4) (tileSize/4) $ circleSolid radius
+        ]
+        where
+            radius = tileSize/10            
+
+makeFive :: Picture
+makeFive  = pictures[
+        translate (tileSize/4) (3*tileSize/4) $ circleSolid radius,
+        translate (3*tileSize/4) (tileSize/4) $ circleSolid radius,
+        translate (3*tileSize/4) (3*tileSize/4) $ circleSolid radius,
+        translate (tileSize/4) (tileSize/4) $ circleSolid radius,
+        translate (tileSize/2) (tileSize/2) $ circleSolid radius
+        ]
+        where
+            radius = tileSize/10        
+
+makeSix :: Picture
+makeSix  = pictures[
+        translate (tileSize/4) (2*tileSize/3) $ circleSolid radius,
+        translate (tileSize/4) (tileSize/3) $ circleSolid radius,
+        translate (2*tileSize/4) (2*tileSize/3) $ circleSolid radius,
+        translate (2*tileSize/4) (tileSize/3) $ circleSolid radius,
+        translate (3*tileSize/4) (2*tileSize/3) $ circleSolid radius,
+        translate (3*tileSize/4) (tileSize/3) $ circleSolid radius
+        ]
+        where
+            radius = tileSize/10
