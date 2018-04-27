@@ -106,19 +106,60 @@ moveConfigPlayer i j plyr =
 
 checkNewCoord ::Int -> Int -> Board -> (Int,Int) -> Bool
 checkNewCoord i j board (x,y) = elem (x+i,y+j) $ allReachableCoords board
-checkMove :: Int -> Int-> Game -> Bool
-checkMove i j game = checkNewCoord i j (gameBoard game) $ findCoordsPlayer $ gameBoard game
 
+checkMove :: Int -> Int-> Game -> Bool
+checkMove i j game = checkNewCoord i j (playerToMoveBoard game) $ findCoordsPlayer $ playerToMoveBoard game
 checkAndMove :: Int -> Int -> Game -> Game
 checkAndMove i j game 
-    | checkMove i j game = game { gameBoard = (gameBoard game) // [((x,y),Empty),((x+i,y+j),Player)] ,
-    							configPlayer = moveConfigPlayer i j (configPlayer game),
-    							numberOfMoves = (numberOfMoves game) + 1
-    							}
+    | checkMove i j game = game { 
+    							gameBoard = newGameBoard i j game,
+    							configPlayer = newConfigPlayer i j game,
+    							numberOfMoves = newNumberOfMoves game,
+    							isPlaying = newIsPlaying game
+    						}
 
     | otherwise = game
-    where
-      (x,y) = findCoordsPlayer $ gameBoard game
+
+newGameBoard :: Int -> Int -> Game -> (Board, Board)
+newGameBoard i j game 
+	| (isPlaying game) == Player0 = ((fst (gameBoard game)) // [((x1,y1),Empty),((x1+i,y1+j),Player)], snd (gameBoard game))
+	| otherwise = (fst(gameBoard game),(snd (gameBoard game)) // [((x2,y2),Empty),((x2+i,y2+j),Player)])
+	where
+		(x1,y1) = findCoordsPlayer $ fst (gameBoard game)
+		(x2,y2) = findCoordsPlayer $ snd (gameBoard  game)
+
+newConfigPlayer :: Int -> Int-> Game -> (ConfigPlayer, ConfigPlayer)
+newConfigPlayer i j game 
+	| (isPlaying game) == Player0  = ((moveConfigPlayer i j (fst (configPlayer game))),(snd (configPlayer game)))
+	| otherwise = ((fst (configPlayer game) ), moveConfigPlayer i j (snd(configPlayer game)) )
+
+newNumberOfMoves :: Game -> (Int,Int)
+newNumberOfMoves game 
+	| (isPlaying game) == Player0  = ((fst(numberOfMoves game)+1),snd(numberOfMoves game))
+	| otherwise = (fst(numberOfMoves game),(snd(numberOfMoves game)+1) )
+
+newIsPlaying :: Game -> Turn
+newIsPlaying game 
+	| (isPlaying game) == Player0  = Player1
+	| otherwise = Player0
+
+playerToMoveNum :: Game -> Int
+playerToMoveNum game
+	| (isPlaying game) == Player0 = fst (numberOfMoves game)
+	| otherwise = snd (numberOfMoves game)  
+playerToMoveBoard :: Game -> Board
+playerToMoveBoard game
+	| (isPlaying game) == Player0 = fst (gameBoard game)
+	| otherwise = snd (gameBoard game)
+playerToNotMoveBoard :: Game -> Board
+playerToNotMoveBoard game
+	| (isPlaying game) /= Player0 = fst (gameBoard game)
+	| otherwise = snd (gameBoard game)  
+playerToNotMoveConfig :: Game -> ConfigPlayer
+playerToNotMoveConfig game
+	| (isPlaying game) /= Player0 = fst (configPlayer game)
+	| otherwise = snd (configPlayer game)  
+
 
 movePlayer :: Game -> Key -> Game
 movePlayer game key = 
@@ -134,9 +175,9 @@ checkVictory game
 	| playerCoords == targetCoords && topI == targetI  = game { gameState = GameOver }
 	| otherwise = game
 	where
-		playerCoords = findCoordsPlayer $ gameBoard game
+		playerCoords = findCoordsPlayer $ playerToNotMoveBoard game
 		targetCoords = fst $ finalTarget game
-		topI = top (configPlayer game)
+		topI = top (playerToNotMoveConfig game)
 		targetI = snd ( finalTarget game )
 
 changeGame :: Int -> Game
