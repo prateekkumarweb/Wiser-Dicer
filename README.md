@@ -24,7 +24,11 @@ final configuration of the dice is also given we have to move the dice in such a
 ```
 $ cd Wiser-Dicer
 ```
+* Configure using Cabal
 
+```
+$ cabal configure
+```
 * Install using Cabal
 
 ```
