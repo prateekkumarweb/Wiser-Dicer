@@ -215,7 +215,9 @@ checkVictory game
 
 -- | Changes the level of the game
 changeGame :: Int -> Game
-changeGame i = initGameForMapLevel i
+changeGame i 
+	| i == 6 = initGameForMapLevel 5
+	| otherwise = initGameForMapLevel i
 
 -- | On pressing space key level is changed
 startNewGame :: Game -> Key -> Game
