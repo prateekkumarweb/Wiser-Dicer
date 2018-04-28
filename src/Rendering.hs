@@ -241,7 +241,6 @@ makeSix  = pictures[
         where
             radius = tileSize/10
 
-<<<<<<< HEAD
 turnMarker :: Picture
 turnMarker = pictures [
 		polygon[(50,0),(100,50),(0,50)],
@@ -256,10 +255,7 @@ printTurnMarker game
               	n = nI $ maps !! (level game) 
 
 
--- change the names above
-=======
 -- | Convets the given game into picture and dislpays it in the form of the picture
->>>>>>> d3fd30c67aebd3fa7e44149cbf88dd12ae1b80e8
 gameAsPicture :: Game -> Picture
 gameAsPicture game = pictures [ line [(0,-1000),(0,1000)] 
 			
