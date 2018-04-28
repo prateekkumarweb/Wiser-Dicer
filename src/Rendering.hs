@@ -110,7 +110,7 @@ gameGrid i game = pictures [
 
 ------------changed
 scoreboard :: Int -> Game ->Picture
-scoreboard i game = pictures [translate (1.5*tileSize) (-tileSize) $ scale 0.2 0.2 $ text $ "Total Moves" ++ (show $ playerNumOfMoves i game) ]
+scoreboard i game = pictures [translate (1.5*tileSize) (-tileSize) $ scale 0.2 0.2 $ text $ "Total Moves: " ++ (show $ playerNumOfMoves i game) ]
 
 makeFinal :: Game -> Picture -> Picture
 makeFinal game pic 
@@ -209,11 +209,27 @@ makeSix  = pictures[
         where
             radius = tileSize/10
 
+turnMarker :: Picture
+turnMarker = pictures [
+		polygon[(50,0),(100,50),(0,50)],
+		polygon[(25,50),(75,50),(75,100),(25,100)]
+	]
+
+printTurnMarker :: Game -> Picture
+printTurnMarker game 
+	| (isPlaying game) == Player0 = translate (fromIntegral(-n)*tileSize-100.0) ((-1)*fromIntegral(n)*tileSize/2)  turnMarker
+	| otherwise = translate (100.0) ((-1)*fromIntegral(n)*tileSize/2)  turnMarker
+	where
+              	n = nI $ maps !! (level game) 
+
+
 -- change the names above
 gameAsPicture :: Game -> Picture
 gameAsPicture game = pictures [ line [(0,-1000),(0,1000)] 
-					 , translate (fromIntegral(-n-1)*tileSize) ((-1)*fromIntegral(n)*tileSize/2) frame1
-					,translate (tileSize/2) ((-1)*fromIntegral(n)*tileSize/2) frame2
+			
+					,translate (fromIntegral(-n)*tileSize-100.0) ((-1)*fromIntegral(n)*tileSize/2) frame1
+					,translate (100.0) ((-1)*fromIntegral(n)*tileSize/2) frame2
+				,printTurnMarker game
 					]
                 	where
                         	frame1 = makeFinal game $ gameGrid 0 game
