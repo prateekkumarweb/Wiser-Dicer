@@ -7,7 +7,7 @@ final configuration of the dice is also given we have to move the dice in such a
 ## Contents-
 * Description
 * Installation
-* Usage
+* How to Play
 * Contributors
 
 ### Installation Instructions
@@ -42,7 +42,12 @@ $ cabal run
 
 
 
-### Usage-
+### How to Play-
+
+* White - die, Green - target
+
+The center value represents the top side value of the die
+The up, down, left and right values represents the respective values on die sides.
 
 ### Contributors-
 * Sudhanshu chawhan.
