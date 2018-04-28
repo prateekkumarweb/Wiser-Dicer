@@ -3,12 +3,12 @@ module Maps (
   maps
 ) where
 
-
-data Level = Level { lMap            :: ([String],[String])
-                                , lStartPos   :: ((Int,Int),(Int,Int))
-                                , config        ::  ([Int],[Int])
-                                , final          :: ((Int,Int),Int)
-                                , nI                :: Int
+-- | Provides the different levels in the game
+data Level = Level { lMap            :: ([String],[String]) -- ^ Contain string of character denoting the Map of the Game. 
+                    , lStartPos      :: ((Int,Int),(Int,Int)) -- ^ contains the start position of bot the players
+                    , config         ::  ([Int],[Int])     -- ^ initial config of both  the players
+                    , final          :: ((Int,Int),Int)    -- ^ final position with the number on the top
+                    , nI             :: Int                -- ^ sqare of size n
                    } deriving Show
 
 maps = [
@@ -35,7 +35,7 @@ maps = [
               , lStartPos = ((0,3),(0,3))
         , config = ([6,1,4,3,2,5],[6,1,4,3,2,5])
         , final = ((3,0),5)
-        , nI = 4
+        , nI = 5
               },
        Level { lMap = (["wwww",
                         "wsee",
@@ -51,10 +51,3 @@ maps = [
               }
 
   ]
-
-
--- getMap level x y =
---   if 0 <= x && x <= 4 &&            
---      0 <= y && y <= 4
---     then (lMap level !! y) !! x  
---     else ' '
