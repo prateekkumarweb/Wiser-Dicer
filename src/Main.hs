@@ -15,4 +15,3 @@ main = play window backgroundColor 30 initialGame gameAsPicture transformGame (c
  where 
  	window = FullScreen
 	backgroundColor = cyan
-	

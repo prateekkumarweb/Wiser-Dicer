@@ -72,24 +72,24 @@ moveConfigPlayerDown  plyr = ConfigPlayer{
 -- | If the player choses to move the dice in east direction then congiuration changes
 moveConfigPlayerRight :: ConfigPlayer -> ConfigPlayer
 moveConfigPlayerRight  plyr = ConfigPlayer{
-	top = east plyr,
-	bottom = west plyr,
-	north = north plyr,
-	south = south plyr,
-	east = bottom plyr,
-	west = top plyr
-}
-
-
--- | If the player choses to move the dice in west direction then congiuration changes
-moveConfigPlayerLeft :: ConfigPlayer -> ConfigPlayer
-moveConfigPlayerLeft  plyr = ConfigPlayer{
 	top = west plyr,
 	bottom = east plyr,
 	north = north plyr,
 	south = south plyr,
 	east = top plyr,
 	west = bottom plyr
+}
+
+
+-- | If the player choses to move the dice in west direction then congiuration changes
+moveConfigPlayerLeft :: ConfigPlayer -> ConfigPlayer
+moveConfigPlayerLeft  plyr = ConfigPlayer{
+	top = east plyr,
+	bottom = west plyr,
+	north = north plyr,
+	south = south plyr,
+	east = bottom plyr,
+	west = top plyr
 }
 
 
@@ -194,7 +194,7 @@ playerToNotMoveConfig game
 movePlayer :: Game -> Key -> Game
 movePlayer game key = 
     case key of
-      ( SpecialKey KeyEnter) -> changeGame $ (level game) + 1
+      ( SpecialKey KeyShiftL) -> changeGame $ (level game) + 1
       (SpecialKey KeyUp) -> checkAndMove 0 1 game 
       (SpecialKey KeyDown) -> checkAndMove 0 (-1) game 
       (SpecialKey KeyRight) -> checkAndMove 1 0 game 
@@ -215,12 +215,12 @@ checkVictory game
 
 -- | Changes the level of the game
 changeGame :: Int -> Game
-changeGame i = initGameForMapLevel i 
+changeGame i = initGameForMapLevel i
 
 -- | On pressing space key level is changed
 startNewGame :: Game -> Key -> Game
 startNewGame game key 
-	| key == (SpecialKey KeyEnter) = changeGame $ (level game) + 1
+	| key == (SpecialKey KeyShiftL) = changeGame $ (level game) + 1
 	| key == (SpecialKey KeySpace) = changeGame $ (level game) + 1
 	| otherwise = game
 
