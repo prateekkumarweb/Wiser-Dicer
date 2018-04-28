@@ -4,6 +4,7 @@ import Data.Array
 import Data.Foldable ( asum )
 import Helper
 import Game
+import Maps
 import Graphics.Gloss.Interface.Pure.Game
 
 moveConfigPlayerUp :: ConfigPlayer -> ConfigPlayer
@@ -99,13 +100,13 @@ checkVictory game
 		playerCoords = findCoordsPlayer $ gameBoard game
 		targetCoords = fst $ finalTarget game
 		topI = top (configPlayer game)
-		targetI = snd ( finalTarget game )
+		targetI = snd ( finalTarget game)
 
 
 
 changeGame :: Int -> Game
 changeGame i 
-	| i == 6 = initGameForMapLevel 5
+	| i == (length maps) = initGameForMapLevel (i-1)
 	| otherwise = initGameForMapLevel i 
 
 startNewGame :: Game -> Key -> Game
