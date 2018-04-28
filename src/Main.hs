@@ -8,7 +8,7 @@ import Game
 import Rendering
 import Logic
 
--- transformGame _ game = game
+-- | Main function that controls the state of the game TransformGame _ game = game
 
 main :: IO ()
 main = play window backgroundColor 30 initialGame gameAsPicture transformGame (const id)
