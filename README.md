@@ -10,7 +10,33 @@ final configuration of the dice is also given we have to move the dice in such a
 * Usage
 * Contributors
 
-### Installation-
+### Installation Instructions
+
+* Install Haskell Platform on your system. Installation instructions can be found [here](https://www.haskell.org/platform/)
+* Clone the repository, using
+
+ ```
+ $ git clone https://github.com/IITH-SBJoshi/Wiser-Dicer
+ ```
+
+* Change the working directory to that of the cloned repository
+
+```
+$ cd Wiser-Dicer
+```
+
+* Install using Cabal
+
+```
+$ cabal install
+```
+
+* Execute
+
+```
+$ ./Artillery-Game
+```
+
 
 
 ### Usage-
