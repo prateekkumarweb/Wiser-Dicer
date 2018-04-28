@@ -134,8 +134,8 @@ makeFinal game pic
 -- | Finds the player who won the game
 whoWon :: Game -> Picture
 whoWon game 
-		| (isPlaying game) == Player0 = translate (-tileSize) (-tileSize) $ scale (0.2*tileSize/100) (0.2*tileSize/100) $ text "Winner Player2"
-		| otherwise =  translate (-tileSize) (-tileSize) $ scale (0.2*tileSize/100) (0.2*tileSize/100) $ text "Winner Player1"
+		| (isPlaying game) == Player0 = translate (0) (-1.5*tileSize) $ scale (0.2*tileSize/100) (0.2*tileSize/100) $ text "Winner Player2"
+		| otherwise =  translate (0) (-1.5*tileSize) $ scale (0.2*tileSize/100) (0.2*tileSize/100) $ text "Winner Player1"
 
 
 
@@ -242,15 +242,15 @@ makeSix  = pictures[
             radius = tileSize/10
 
 turnMarker :: Picture
-turnMarker = pictures [
+turnMarker = color red $ pictures [
 		polygon[(50,0),(100,50),(0,50)],
 		polygon[(25,50),(75,50),(75,100),(25,100)]
 	]
 
 printTurnMarker :: Game -> Picture
 printTurnMarker game 
-	| (isPlaying game) == Player0 = translate (fromIntegral(-n)*tileSize-100.0) ((-1)*fromIntegral(n)*tileSize/2)  turnMarker
-	| otherwise = translate (100.0) ((-1)*fromIntegral(n)*tileSize/2)  turnMarker
+	| (isPlaying game) == Player0 = translate (fromIntegral(-n)*tileSize-100.0) ((-1)*fromIntegral(n)*tileSize/2) $ translate (fromIntegral(n)*tileSize/2) (fromIntegral(n)*tileSize + tileSize/2) turnMarker
+	| otherwise = translate (100.0) ((-1)*fromIntegral(n)*tileSize/2) $ translate (fromIntegral(n)*tileSize/2) (fromIntegral(n)*tileSize + tileSize/2) turnMarker 
 	where
               	n = nI $ maps !! (level game) 
 
