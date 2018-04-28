@@ -32,9 +32,8 @@ $ cabal install
 ```
 
 * Execute
-
 ```
-$ ./Wiser-Dicer
+$ cabal run
 ```
 
 
