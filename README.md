@@ -34,7 +34,7 @@ $ cabal install
 * Execute
 
 ```
-$ ./Artillery-Game
+$ ./Wiser-Dicer
 ```
 
 
