@@ -194,7 +194,7 @@ playerToNotMoveConfig game
 movePlayer :: Game -> Key -> Game
 movePlayer game key = 
     case key of
-      ( SpecialKey KeyShiftL) -> changeGame $ (level game) + 1
+      ( SpecialKey KeySpace) -> changeGame $ (level game) + 1
       (SpecialKey KeyUp) -> checkAndMove 0 1 game 
       (SpecialKey KeyDown) -> checkAndMove 0 (-1) game 
       (SpecialKey KeyRight) -> checkAndMove 1 0 game 
@@ -222,7 +222,6 @@ changeGame i
 -- | On pressing space key level is changed
 startNewGame :: Game -> Key -> Game
 startNewGame game key 
-	| key == (SpecialKey KeyShiftL) = changeGame $ (level game) + 1
 	| key == (SpecialKey KeySpace) = changeGame $ (level game) + 1
 	| otherwise = game
 
