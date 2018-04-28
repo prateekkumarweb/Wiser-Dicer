@@ -84,7 +84,7 @@ checkAndMove i j game
 movePlayer :: Game -> Key -> Game
 movePlayer game key = 
     case key of
-      (SpecialKey KeyEnter) -> changeGame $ (level game) + 1
+      (SpecialKey KeySpace) -> changeGame $ (level game) + 1
       (SpecialKey KeyUp) -> checkAndMove 0 1 game 
       (SpecialKey KeyDown) -> checkAndMove 0 (-1) game 
       (SpecialKey KeyRight) -> checkAndMove 1 0 game 
@@ -104,11 +104,12 @@ checkVictory game
 
 
 changeGame :: Int -> Game
-changeGame i = initGameForMapLevel i 
+changeGame i 
+	| i == 6 = initGameForMapLevel 5
+	| otherwise = initGameForMapLevel i 
 
 startNewGame :: Game -> Key -> Game
 startNewGame game key 
-	| key == (SpecialKey KeyShiftL) = changeGame $ (level game) + 1
 	| key == (SpecialKey KeySpace) = changeGame $ (level game) + 1
 	| otherwise = game
 
