@@ -10,6 +10,15 @@ final configuration of the dice is also given we have to move the dice in such a
 * How to Play
 * Contributors
 
+### Description
+
+* Language - Haskell
+* Compiler - ghc
+* Text Editor - Sublime text
+* Building and packaging - Cabal
+* Documentation - Haddock
+* Graphics Library - Gloss
+
 ### Installation Instructions
 
 * Install Haskell Platform on your system. Installation instructions can be found [here](https://www.haskell.org/platform/)
